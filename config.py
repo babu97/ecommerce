@@ -1,10 +1,10 @@
 import os
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
-
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "hard to guess string"
 
     @staticmethod
     def init_app(app):
@@ -13,20 +13,21 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DEV_DATABASE_URL"
+    ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-        'sqlite://'
+    SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URL") or "sqlite://"
     WTF_CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URL"
+    ) or "sqlite:///" + os.path.join(basedir, "data.sqlite")
 
     @classmethod
     def init_app(cls, app):
@@ -35,25 +36,27 @@ class ProductionConfig(Config):
         # email errors to the administrators
         import logging
         from logging.handlers import SMTPHandler
+
         credentials = None
         secure = None
-        if getattr(cls, 'MAIL_USERNAME', None) is not None:
+        if getattr(cls, "MAIL_USERNAME", None) is not None:
             credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
-            if getattr(cls, 'MAIL_USE_TLS', None):
+            if getattr(cls, "MAIL_USE_TLS", None):
                 secure = ()
         mail_handler = SMTPHandler(
             mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
             fromaddr=cls.FLASKY_MAIL_SENDER,
             toaddrs=[cls.FLASKY_ADMIN],
-            subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + ' Application Error',
+            subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + " Application Error",
             credentials=credentials,
-            secure=secure)
+            secure=secure,
+        )
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
 
 class HerokuConfig(ProductionConfig):
-    SSL_REDIRECT = True if os.environ.get('DYNO') else False
+    SSL_REDIRECT = True if os.environ.get("DYNO") else False
 
     @classmethod
     def init_app(cls, app):
@@ -69,6 +72,7 @@ class HerokuConfig(ProductionConfig):
         # log to stderr
         import logging
         from logging import StreamHandler
+
         file_handler = StreamHandler()
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
@@ -82,6 +86,7 @@ class DockerConfig(ProductionConfig):
         # log to stderr
         import logging
         from logging import StreamHandler
+
         file_handler = StreamHandler()
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
@@ -95,18 +100,18 @@ class UnixConfig(ProductionConfig):
         # log to syslog
         import logging
         from logging.handlers import SysLogHandler
+
         syslog_handler = SysLogHandler()
         syslog_handler.setLevel(logging.INFO)
         app.logger.addHandler(syslog_handler)
 
 
 config = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
-    'heroku': HerokuConfig,
-    'docker': DockerConfig,
-    'unix': UnixConfig,
-
-    'default': DevelopmentConfig
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "production": ProductionConfig,
+    "heroku": HerokuConfig,
+    "docker": DockerConfig,
+    "unix": UnixConfig,
+    "default": DevelopmentConfig,
 }
