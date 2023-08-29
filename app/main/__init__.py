@@ -1,4 +1,4 @@
 from flask import Blueprint
 
-shop = Blueprint("shop", __name__)
+main = Blueprint("main", __name__)
 from . import views
