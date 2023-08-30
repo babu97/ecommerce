@@ -1,14 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import config
+from flask_bootstrap import Bootstrap
 
 db = SQLAlchemy()
+boostrap = Bootstrap()
 
 
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
+    boostrap.init_app(app)
+    db.init_app(app)
 
     from .admin import admin as admin_blueprint
 
