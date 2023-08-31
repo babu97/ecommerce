@@ -18,4 +18,11 @@ class RegistationForm(FlaskForm):
         "confirm password",
         validators=[DataRequired(), EqualTo("password", message="password must match")],
     )
-    submit = SubmitField("Submit")
+    submit = SubmitField("SignUp")
+
+
+class LoginForm(FlaskForm):
+    email = StringField("Email Address", validators=[Email(), Length(1, 64)])
+    password = PasswordField("password", validators=[DataRequired()])
+
+    submit = SubmitField("LogIn")

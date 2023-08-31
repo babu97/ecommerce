@@ -1,9 +1,9 @@
 from datetime import datetime
 from flask_login import UserMixin
-from . import db, bycrypt
+from . import db, bycrypt, login_manager
 
 
-class User(UserMixin, db.model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
@@ -24,3 +24,7 @@ class User(UserMixin, db.model):
 
     def __repr__(self):
         return f"<email{{self.email }}>"
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
