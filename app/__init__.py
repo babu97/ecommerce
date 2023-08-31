@@ -2,9 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import config
 from flask_bootstrap import Bootstrap
-
+from flask_bcrypt import Bcrypt
 db = SQLAlchemy()
 boostrap = Bootstrap()
+bycrypt = Bcrypt()
 
 
 def create_app(config_name):
@@ -13,6 +14,7 @@ def create_app(config_name):
     config[config_name].init_app(app)
     boostrap.init_app(app)
     db.init_app(app)
+    Bcrypt.init_app(app)
 
     from .admin import admin as admin_blueprint
 

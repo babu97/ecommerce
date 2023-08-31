@@ -1,12 +1,11 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Ecommerce site {% endblock %}
+{% block title %}Flasky{% endblock %}
 
 {% block head %}
-    {{ super() }}
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  {{ super() }}
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
 {% block navbar %}
@@ -15,11 +14,22 @@
 
 {% block content %}
 <div class="container">
-
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {% block page_content %}{% endblock %}
 </div>
-    
 {% endblock %}
 
 {% block scripts %}
-  
+  {{ super() }}
 {% endblock %}
