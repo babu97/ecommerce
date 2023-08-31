@@ -1,26 +1,42 @@
 from datetime import datetime
 from flask_login import UserMixin
 from . import db, bycrypt, login_manager
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    created_on = db.Column(db.DateTime, nullable=False)
+    password_hash = db.Column(db.String(128))
+    created_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
-    confirmed_on = db.Column(db.DateTime, nullable=False)
+    confirmed = db.Column(db.Boolean, default=False)
 
     def __init__(
-        self, email, password, is_admin=False, is_confirmed=False, confirmed_on=None
+        self,
+        email,
+        username,
+        password,
+        is_admin=False,
+        is_confirmed=False,
+        confirmed=False,
     ):
         self.email = email
-        self.password = bycrypt.generate_password_hash(password)
+        self.username = username
+        self.password_hash = generate_password_hash(password)
         self.created_on = datetime.now()
         self.is_admin = is_admin
         self.is_confirmed = is_confirmed
-        self.confirmed_on = confirmed_on
+        self.confirmed = confirmed
+
+    @property
+    def password(self):
+        raise AttributeError("password is not a readable attribute")
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f"<email{{self.email }}>"
