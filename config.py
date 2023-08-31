@@ -16,7 +16,10 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DEV_DATABASE_URL"
     ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
-    
+
+    SECURITY_PASSWORD_SALT = os.environ.get(
+        "SECURITY_PASSWORD_SALT", default="very-important"
+    )
 
 
 class TestingConfig(Config):
@@ -24,11 +27,18 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URL") or "sqlite://"
     WTF_CSRF_ENABLED = False
 
+    SECURITY_PASSWORD_SALT = os.environ.get(
+        "SECURITY_PASSWORD_SALT", default="very-important"
+    )
+
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL"
     ) or "sqlite:///" + os.path.join(basedir, "data.sqlite")
+    SECURITY_PASSWORD_SALT = os.environ.get(
+        "SECURITY_PASSWORD_SALT", default="very-important"
+    )
 
     @classmethod
     def init_app(cls, app):

@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
+
 db = SQLAlchemy()
 boostrap = Bootstrap()
 bycrypt = Bcrypt()
