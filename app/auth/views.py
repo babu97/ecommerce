@@ -3,12 +3,11 @@ from app import db, bycrypt
 from .forms import RegistationForm, LoginForm
 from ..models import User
 from ..decorators import logout_required
-from flask_login import current_user, login_user,login_required
+from flask_login import current_user, login_user, login_required, logout_user
 from . import auth
 from werkzeug.security import check_password_hash
 
-
-
+from ..email import send_email
 
 @logout_required
 @auth.route("/register", methods=["GET", "POST"])
@@ -42,5 +41,36 @@ def login():
     return render_template("auth/login.html", form=form)
 
 
-@auth.route('/logout')
+@auth.route("/logout")
 @login_required
+def logout():
+    logout_user()
+    flash("You have been logged out.", category="warning")
+    return redirect(url_for("main.index"))
+
+
+@auth.route("/confirm/<token>")
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for("main.index"))
+    if current_user.confirm(token):
+        db.session.commit()
+        flash("You have confirmed your account.Thanks!")
+    else:
+        flash("The confirmation link is invalid or has expired.")
+    return redirect(url_for("main.index"))
+
+
+@auth.route("/confirm")
+@login_required
+def resend_confirmation():
+    token = current_user.generate_confirmation_token()
+    send_email(
+        current_user.email,
+        "Confirm You Account",
+        "auth/email/confirm",
+        user=current_user,
+        token=token,
+    )
+    return redirect(url_for('main.index'))
