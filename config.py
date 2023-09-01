@@ -20,6 +20,7 @@ class DevelopmentConfig(Config):
     SECURITY_PASSWORD_SALT = os.environ.get(
         "SECURITY_PASSWORD_SALT", default="very-important"
     )
+    API_KEY = os.environ.get("API_KEY")
 
 
 class TestingConfig(Config):
@@ -30,6 +31,7 @@ class TestingConfig(Config):
     SECURITY_PASSWORD_SALT = os.environ.get(
         "SECURITY_PASSWORD_SALT", default="very-important"
     )
+    API_KEY = os.environ.get("API_KEY")
 
 
 class ProductionConfig(Config):
@@ -39,6 +41,8 @@ class ProductionConfig(Config):
     SECURITY_PASSWORD_SALT = os.environ.get(
         "SECURITY_PASSWORD_SALT", default="very-important"
     )
+
+    API_KEY = os.environ.get("API_KEY")
 
     @classmethod
     def init_app(cls, app):

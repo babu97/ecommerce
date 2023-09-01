@@ -3,7 +3,7 @@ from app import db, bycrypt
 from .forms import RegistationForm, LoginForm
 from ..models import User
 from ..decorators import logout_required
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user,login_required
 from . import auth
 from werkzeug.security import check_password_hash
 
@@ -40,3 +40,7 @@ def login():
             return redirect(next)
         flash("Invalid email or password.")
     return render_template("auth/login.html", form=form)
+
+
+@auth.route('/logout')
+@login_required
