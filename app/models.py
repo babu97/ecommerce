@@ -15,7 +15,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     created_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    is_confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed = db.Column(db.Boolean, default=False)
 
     def __init__(
@@ -43,7 +42,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_confirmation_token(self, expiration=3600):
-        s = URLSafeSerializer(current_app.config["SECRET_KEY", expiration])
+        s = URLSafeSerializer(current_app.config["SECRET_KEY"], expiration)
         return s.dumps(
             {"confirm": self.id}, salt=current_app.config["SECURITY_PASSWORD_SALT"]
         )
@@ -66,3 +65,11 @@ class User(UserMixin, db.Model):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+
+class Brand(db.model):
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
+    name = db.Column(db.String(30), nullable=False, unique=True)

@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash
 
 from ..email import send_email
 
+
 @logout_required
 @auth.route("/register", methods=["GET", "POST"])
 def register():
@@ -37,7 +38,7 @@ def login():
                 next = url_for("main.index")
                 flash("You have succesfully  Logged In", category="success")
             return redirect(next)
-        flash("Invalid email or password.")
+        flash("Invalid email or password.", category="danger")
     return render_template("auth/login.html", form=form)
 
 
@@ -56,9 +57,9 @@ def confirm(token):
         return redirect(url_for("main.index"))
     if current_user.confirm(token):
         db.session.commit()
-        flash("You have confirmed your account.Thanks!")
+        flash("You have confirmed your account.Thanks!", category="success")
     else:
-        flash("The confirmation link is invalid or has expired.")
+        flash("The confirmation link is invalid or has expired.", category="danger")
     return redirect(url_for("main.index"))
 
 
@@ -73,4 +74,22 @@ def resend_confirmation():
         user=current_user,
         token=token,
     )
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
+
+
+@auth.before_app_request
+def before_request():
+    if (
+        current_user.is_authenticated
+        and not current_user.confirmed
+        and request.blueprint != "auth"
+        and request.endpoint != "static"
+    ):
+        return redirect(url_for("auth.unconfirmed"))
+
+
+@auth.route("/unconfirmed")
+def unconfirmed():
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for("main.index"))
+    return render_template("auth/unconfirmed.html")

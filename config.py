@@ -5,6 +5,17 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or "hard to guess string"
+    SECURITY_PASSWORD_SALT = os.environ.get(
+        "SECURITY_PASSWORD_SALT", default="very-important"
+    )
+    API_KEY = os.environ.get("API_KEY")
+    MAILGUN_KEY = os.environ.get("MAILGUN_KEY")
+    MAILGUN_DOMAIN = os.environ.get("MAILGUN_DOMAIN")
+    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
+    FLASKY_MAIL_SENDER = 'babu Admin <babu@mentwork.co.ke>'
+
+
+    FLASKY_MAIL_SUBJECT_PREFIX = "[Babu_computers]"
 
     @staticmethod
     def init_app(app):
@@ -16,13 +27,6 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DEV_DATABASE_URL"
     ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
-
-    SECURITY_PASSWORD_SALT = os.environ.get(
-        "SECURITY_PASSWORD_SALT", default="very-important"
-    )
-    API_KEY = os.environ.get("API_KEY")
-    MAILGUN_KEY = os.environ.get("MAILGUN_KEY")
-    MAILGUN_DOMAIN = os.environ.get("MAILGUN_DOMAIN")
 
 
 class TestingConfig(Config):

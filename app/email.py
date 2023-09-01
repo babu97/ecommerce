@@ -11,7 +11,7 @@ def send_email(to, subject, template, **kwargs):
 
     email_data = {
         "subject": app.config["FLASKY_MAIL_SUBJECT_PREFIX"] + " " + subject,
-        "from": f"{app.config['FLASKY_MAIL_SENDER']} <print@{app.config['MAILGUN_DOMAIN']}>",
+        "from": f"{app.config['FLASKY_MAIL_SENDER']} <{app.config['MAILGUN_DOMAIN']}>",
         "to": [to],
         "text": render_template(template + ".txt", **kwargs),
         "html": render_template(template + ".html", **kwargs),
