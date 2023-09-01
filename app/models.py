@@ -5,7 +5,7 @@ from . import db, bycrypt, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import URLSafeSerializer
 
 
 class User(UserMixin, db.Model):
@@ -43,13 +43,15 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_confirmation_token(self, expiration=3600):
-        s = Serializer(current_app.config["SECRET_KEY", expiration])
-        return s.dumps({"confirm": self.id}).decode("utf-8")
+        s = URLSafeSerializer(current_app.config["SECRET_KEY", expiration])
+        return s.dumps(
+            {"confirm": self.id}, salt=current_app.config["SECURITY_PASSWORD_SALT"]
+        )
 
     def confirm(self, token):
-        s = Serializer(current_app.config["SECRET_KEY"])
+        s = URLSafeSerializer(current_app.config["SECRET_KEY"])
         try:
-            data = s.loads(token.encode("utf-8"))
+            data = s.loads(token, salt=current_app.config["SECURITY_PASSWORD_SALT"])
         except:
             return False
         if data.get("confirm") != self.id:

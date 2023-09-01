@@ -1,0 +1,11 @@
+<h1> Dear {{ user.username }},
+    Welcome to Flasky!</h1>
+
+<p>
+  Welcome! Thanks for signing up. Please follow this link to activate your
+  account:
+</p>
+<p> {{ url_for('auth.confirm', token=token, _external=True) }}
+</p>
+<br />
+<p>Cheers!</p>
