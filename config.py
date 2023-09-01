@@ -21,6 +21,8 @@ class DevelopmentConfig(Config):
         "SECURITY_PASSWORD_SALT", default="very-important"
     )
     API_KEY = os.environ.get("API_KEY")
+    MAILGUN_KEY = os.environ.get("MAILGUN_KEY")
+    MAILGUN_DOMAIN = os.environ.get("MAILGUN_DOMAIN")
 
 
 class TestingConfig(Config):
