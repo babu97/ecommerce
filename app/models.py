@@ -67,7 +67,7 @@ class User(UserMixin, db.Model):
         return User.query.get(int(user_id))
 
 
-class Brand(db.model):
+class Brand(db.Model):
     id = db.Column(
         db.Integer,
         primary_key=True,
