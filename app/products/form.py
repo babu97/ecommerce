@@ -16,5 +16,24 @@ class Addproducts(FlaskForm):
     stock = IntegerField("stock", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     colors = TextAreaField("colors", validators=[DataRequired()])
-    image_1 = FileField("image_1", validators=[FileRequired(), FileAllowed('jpg','png','gif','jpeg')],
-                        'images only please')
+    image_1 = FileField(
+        "Image 1",
+        validators=[
+            FileRequired(),
+            FileAllowed(["jpg", "png", "gif", "jpeg"], "Images only please"),
+        ],
+    )
+    image_1 = FileField(
+        "Image 2",
+        validators=[
+            FileRequired(),
+            FileAllowed(["jpg", "png", "gif", "jpeg"], "Images only please"),
+        ],
+    )
+    image_1 = FileField(
+        "Image 3",
+        validators=[
+            FileRequired(),
+            FileAllowed(["jpg", "png", "gif", "jpeg"], "Images only please"),
+        ],
+    )
