@@ -4,7 +4,12 @@ from wtforms.validators import DataRequired, Length
 from flask_wtf.file import FileAllowed, FileField, FileRequired
 
 
-class nameForm(FlaskForm):
+class NameForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField("Add")
+
+
+class CategoryForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired(), Length(1, 64)])
     submit = SubmitField("Add")
 
@@ -23,14 +28,14 @@ class Addproducts(FlaskForm):
             FileAllowed(["jpg", "png", "gif", "jpeg"], "Images only please"),
         ],
     )
-    image_1 = FileField(
+    image_2 = FileField(
         "Image 2",
         validators=[
             FileRequired(),
             FileAllowed(["jpg", "png", "gif", "jpeg"], "Images only please"),
         ],
     )
-    image_1 = FileField(
+    image_3 = FileField(
         "Image 3",
         validators=[
             FileRequired(),
