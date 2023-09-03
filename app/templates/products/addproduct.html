@@ -1,9 +1,16 @@
-{% extends layout.html %}
+{% extends 'layout.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block content %}
+
+
 <div class="container">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h2 class="text-center bg-info p-2"> Add a product </h2>
+
+        {{ wtf.quick_form(form) }}
+
     </div>
     <div class="col-md-2"></div>
 

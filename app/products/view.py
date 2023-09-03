@@ -21,7 +21,10 @@ def addbrand():
         else:
             flash(f"Brand { brand.name } added successfully", category="success")
             return redirect(url_for(".addbrand"))
-    return render_template("products/addbrand.html", form=form,)
+    return render_template(
+        "products/addbrand.html",
+        form=form,
+    )
 
 
 @products.route("/addcategory", methods=["GET", "POST"])
@@ -40,5 +43,13 @@ def addcategory():
             return redirect(url_for(".addcategory"))
     return render_template("products/addbrand.html", form=form)
 
-@products.route('/addproduct', methods = ['GET','POST'])
 
+@products.route("/addproduct", methods=["GET", "POST"])
+def addproduct():
+    form = Addproducts()
+    if form.validate_on_submit():
+        pass
+
+    return render_template(
+        "products/addproduct.html", title="Add product page", form=form
+    )
