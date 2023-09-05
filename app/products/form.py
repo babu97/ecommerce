@@ -15,7 +15,7 @@ class CategoryForm(FlaskForm):
 
 
 class Addproducts(FlaskForm):
-    name = StringField("Name", validators=[DataRequired()])
+    name = StringField("Name",validators=[DataRequired()])
     price = StringField("Price", validators=[DataRequired()])
     discount = IntegerField("Discount", default=0)
     stock = IntegerField("stock", validators=[DataRequired()])

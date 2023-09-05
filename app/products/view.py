@@ -47,6 +47,8 @@ def addcategory():
 @products.route("/addproduct", methods=["GET", "POST"])
 def addproduct():
     form = Addproducts()
+    brands = Brand.query.all()
+    categories = Category.query.all()
     if form.validate_on_submit():
         pass
 
